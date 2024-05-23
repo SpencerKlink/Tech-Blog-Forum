@@ -1,20 +1,12 @@
-{{#extend "main"}}
-  {{#content "body"}}
-    <div class="signup-container">
-      <h2>Sign Up</h2>
-      <div class="error-message" style="color: red;"></div>
-      <form class="signup-form">
-        <div>
-          <label for="username-signup">Username</label>
-          <input type="text" id="username-signup" name="username" required />
-        </div>
-        <div>
-          <label for="password-signup">Password</label>
-          <input type="password" id="password-signup" name="password" required />
-        </div>
-        <button type="submit">Sign Up</button>
-      </form>
+<form id="signup-form">
+    <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
     </div>
-    <script src="/js/signup.js"></script>
-  {{/content}}
-{{/extend}}
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div id="signup-error" style="color: red;"></div>
+    <button type="submit">Sign Up</button>
+</form>
