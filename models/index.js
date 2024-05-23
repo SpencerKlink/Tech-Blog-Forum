@@ -1,19 +1,20 @@
 const Sequelize = require('sequelize');
 const config = require('../config/config');
 
+const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(
-  config.development.database,
-  config.development.username,
-  config.development.password,
+  config[env].database,
+  config[env].username,
+  config[env].password,
   {
-    host: config.development.host,
-    dialect: config.development.dialect,
+    host: config[env].host,
+    dialect: config[env].dialect,
   }
 );
 
-const User = require('./User')(sequelize, Sequelize);
-const Post = require('./Post')(sequelize, Sequelize);
-const Comment = require('./Comment')(sequelize, Sequelize);
+const User = require('./User');
+const Post = require('./Post');
+const Comment = require('./Comment');
 
 User.hasMany(Post, {
     foreignKey: 'userId',
