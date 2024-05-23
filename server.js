@@ -1,15 +1,8 @@
 const express = require('express');
 const sessions = require('express-session');
 const exphbs = require('express-handlebars');
-const Sequelize = require('sequelize'); 
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
-const config = require('./config/config');
-const env = process.env.NODE_ENV || 'development';
-const sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, {
-    host: config[env].host,
-    dialect: config[env].dialect,
-});
-
+const { sequelize } = require('./models');
 const routes = require('./controllers');
 const { homeRoutes, dashboardRoutes, apiRoutes } = require('./controllers');
 
