@@ -1,6 +1,7 @@
 const express = require('express');
 const sessions = require('express-session');
 const exphbs = require('express-handlebars');
+const Sequelize = require('sequelize');
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
 const config = require('./config/config');
 const env = process.env.NODE_ENV || 'development';
