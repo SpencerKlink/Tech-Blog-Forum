@@ -3,7 +3,8 @@ const sessions = require('express-session');
 const exphbs = require('express-handlebars');
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
 const config = require('./config/config');
-const sequelize = process.env.NODE_ENV === 'production' ? config.production : config.development;
+const env = process.env.NODE_ENV || 'development';
+const sequelize = new Sequelize(config[env]);
 
 const routes = require('./controllers');
 const { homeRoutes, dashboardRoutes, apiRoutes } = require('./controllers');
