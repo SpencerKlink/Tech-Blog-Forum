@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const errorElement = document.querySelector('#signup-error');
 
             if (username && password) {
-                const response = await fetch('/api/users/register', {
+                const response = await fetch('/api/users', {
                     method: 'POST',
                     body: JSON.stringify({ username, password }),
                     headers: { 'Content-Type': 'application/json' },
@@ -140,5 +140,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-
