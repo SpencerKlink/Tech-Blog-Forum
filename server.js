@@ -1,28 +1,21 @@
 const express = require('express');
 const sessions = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
 const exphbs = require('express-handlebars');
-const moment = require('moment');
+const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
+const config = require('./config/config');
+const sequelize = process.env.NODE_ENV === 'production' ? config.production : config.development;
 
-const sequelize = require('./config/config');
+const routes = require('./controllers');
 const { homeRoutes, dashboardRoutes, apiRoutes } = require('./controllers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const hbs = exphbs.create({
-    helpers: {
-        formatDate: (date) => {
-            return moment(date).format('MMMM Do YYYY, h:mm:ss a');
-        }
-    }
-});
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-app.engine('handlebars', hbs.engine);
+app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
 
 const sess = {
@@ -37,6 +30,8 @@ const sess = {
 };
 
 app.use(sessions(sess));
+
+app.use(routes);
 
 app.use('/', homeRoutes);
 app.use('/dashboard', dashboardRoutes);

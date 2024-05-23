@@ -1,24 +1,7 @@
-const Sequelize = require('sequelize');
 require('dotenv').config();
+const { parse } = require('url');
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    port: process.env.DB_PORT || 3306,
-    logging: false,
-    define: {
-        freezeTableName: true,
-        timestamps: true
-    },
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
-});
-
-module.exports = {
+const dbConfig = {
   development: {
     username: process.env.DB_USER,
     password: process.env.DB_PW,
@@ -26,10 +9,18 @@ module.exports = {
     host: '127.0.0.1',
     dialect: 'mysql',
   },
-  production: {
-    use_env_variable: 'CLEARDB_DATABASE_URL',
-    dialect: 'mysql',
-  },
+  production: {},
 };
 
-module.exports = sequelize;
+if (process.env.JAWSDB_URL) {
+  const parsedUrl = parse(process.env.JAWSDB_URL);
+  dbConfig.production = {
+    username: parsedUrl.auth.split(':')[0],
+    password: parsedUrl.auth.split(':')[1],
+    database: parsedUrl.path.substring(1),
+    host: parsedUrl.hostname,
+    dialect: 'mysql',
+  };
+}
+
+module.exports = dbConfig;
