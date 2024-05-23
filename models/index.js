@@ -1,15 +1,6 @@
-const Sequelize = require('sequelize');
-const config = require('../config/config');
-const env = process.env.NODE_ENV || 'development';
-const sequelizeConfig = config[env];
-const sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, {
-    host: sequelizeConfig.host,
-    dialect: sequelizeConfig.dialect,
-});
-
-const User = require('./User')(sequelize, Sequelize.DataTypes);
-const Post = require('./Post')(sequelize, Sequelize.DataTypes);
-const Comment = require('./Comment')(sequelize, Sequelize.DataTypes);
+const User = require('./User');
+const Post = require('./Post');
+const Comment = require('./Comment');
 
 User.hasMany(Post, {
     foreignKey: 'userId',
@@ -36,7 +27,5 @@ Comment.belongsTo(Post, {
 module.exports = {
     User,
     Post,
-    Comment,
-    sequelize,
-    Sequelize
+    Comment
 };

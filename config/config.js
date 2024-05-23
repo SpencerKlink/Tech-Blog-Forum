@@ -1,7 +1,6 @@
 require('dotenv').config();
-const { parse } = require('url');
 
-const dbConfig = {
+const config = {
   development: {
     username: process.env.DB_USER,
     password: process.env.DB_PW,
@@ -9,18 +8,10 @@ const dbConfig = {
     host: '127.0.0.1',
     dialect: 'mysql',
   },
-  production: {},
+  production: {
+    use_env_variable: 'JAWSDB_URL',
+    dialect: 'mysql',
+  },
 };
 
-if (process.env.JAWSDB_URL) {
-  const parsedUrl = parse(process.env.JAWSDB_URL);
-  dbConfig.production = {
-    username: parsedUrl.auth.split(':')[0],
-    password: parsedUrl.auth.split(':')[1],
-    database: parsedUrl.path.substring(1),
-    host: parsedUrl.hostname,
-    dialect: 'mysql',
-  };
-}
-
-module.exports = dbConfig;
+module.exports = config;

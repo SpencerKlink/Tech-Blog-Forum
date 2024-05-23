@@ -1,66 +1,57 @@
 const router = require('express').Router();
 const { User } = require('../../models');
-const withAuth = require('../../utils/auth');
 
-router.post('/register', async (req, res) => {
+// Sign up
+router.post('/', async (req, res) => {
     try {
-        const newUser = await User.create({
-            username: req.body.username,
-            password: req.body.password
-        });
-
+        const userData = await User.create(req.body);
         req.session.save(() => {
-            req.session.userId = newUser.id;
-            req.session.username = newUser.username;
+            req.session.userId = userData.id;
+            req.session.username = userData.username;
             req.session.loggedIn = true;
 
-            res.json({ message: 'User registered successfully!' });
+            res.status(200).json(userData);
         });
     } catch (err) {
-        if (err.name === 'SequelizeUniqueConstraintError') {
-            res.status(400).json({ message: 'Username already exists. Please choose another.' });
-        } else {
-            res.status(500).json(err);
-        }
+        res.status(500).json({ message: 'Username already exists. Please choose another.' });
     }
 });
 
+// Login
 router.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({
-            where: {
-                username: req.body.username
-            }
-        });
+        const userData = await User.findOne({ where: { username: req.body.username } });
 
-        if (!user) {
-            res.status(400).json({ message: 'No user account found!' });
+        if (!userData) {
+            res.status(400).json({ message: 'Incorrect username or password, please try again' });
             return;
         }
 
-        const validPassword = await user.checkPassword(req.body.password);
+        const validPassword = await userData.checkPassword(req.body.password);
 
         if (!validPassword) {
-            res.status(400).json({ message: 'Incorrect password!' });
+            res.status(400).json({ message: 'Incorrect username or password, please try again' });
             return;
         }
 
         req.session.save(() => {
-            req.session.userId = user.id;
-            req.session.username = user.username;
+            req.session.userId = userData.id;
+            req.session.username = userData.username;
             req.session.loggedIn = true;
 
-            res.json({ user, message: 'You are now logged in!' });
+            res.json({ user: userData, message: 'You are now logged in!' });
         });
+
     } catch (err) {
         res.status(500).json(err);
     }
 });
 
-router.get('/logout', (req, res) => {
+// Logout
+router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
-            res.redirect('/'); 
+            res.status(204).end();
         });
     } else {
         res.status(404).end();
