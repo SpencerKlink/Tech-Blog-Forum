@@ -1,6 +1,19 @@
-const User = require('./User');
-const Post = require('./Post');
-const Comment = require('./Comment');
+const Sequelize = require('sequelize');
+const config = require('../config/config');
+
+const sequelize = new Sequelize(
+  config.development.database,
+  config.development.username,
+  config.development.password,
+  {
+    host: config.development.host,
+    dialect: config.development.dialect,
+  }
+);
+
+const User = require('./User')(sequelize, Sequelize);
+const Post = require('./Post')(sequelize, Sequelize);
+const Comment = require('./Comment')(sequelize, Sequelize);
 
 User.hasMany(Post, {
     foreignKey: 'userId',
@@ -27,5 +40,6 @@ Comment.belongsTo(Post, {
 module.exports = {
     User,
     Post,
-    Comment
+    Comment,
+    sequelize
 };
