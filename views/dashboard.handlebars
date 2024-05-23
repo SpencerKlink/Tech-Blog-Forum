@@ -1,0 +1,14 @@
+<h2>Your Dashboard</h2>
+{{#if posts.length}}
+    {{#each posts}}
+        <div class="post">
+            <h3>{{this.title}}</h3>
+            <p>{{this.content}}</p>
+            <a href="/dashboard/edit/{{this.id}}">Edit</a>
+            <button class="delete-btn" data-id="{{this.id}}">Delete</button>
+        </div>
+    {{/each}}
+{{else}}
+    <p>You have not created any posts yet.</p>
+{{/if}}
+<a href="/dashboard/new">Create New Post</a>
