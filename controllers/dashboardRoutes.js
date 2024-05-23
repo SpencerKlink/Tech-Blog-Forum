@@ -22,7 +22,7 @@ router.get('/', withAuth, async (req, res) => {
         const posts = userPosts.map(post => post.get({ plain: true }));
         res.render('dashboard', {
             posts,
-            loggedIn: true
+            loggedIn: req.session.loggedIn
         });
     } catch (err) {
         res.status(500).json(err);
@@ -49,8 +49,7 @@ router.get('/edit/:id', withAuth, async (req, res) => {
 });
 
 router.get('/new', withAuth, (req, res) => {
-    res.render('new-post', { loggedIn: true });
+    res.render('new-post', { loggedIn: req.session.loggedIn });
 });
-
 
 module.exports = router;

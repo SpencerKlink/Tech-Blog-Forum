@@ -1,10 +1,10 @@
 const express = require('express');
 const sessions = require('express-session');
 const exphbs = require('express-handlebars');
+const Sequelize = require('sequelize'); 
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
-const { sequelize } = require('./models');
-const routes = require('./controllers');
-const { homeRoutes, dashboardRoutes, apiRoutes } = require('./controllers');
+const { sequelize } = require('./models'); 
+const routes = require('./controllers'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +30,10 @@ const sess = {
 app.use(sessions(sess));
 
 app.use(routes);
+
+const homeRoutes = require('./controllers/homeRoutes');
+const dashboardRoutes = require('./controllers/dashboardRoutes');
+const apiRoutes = require('./controllers/api');
 
 app.use('/', homeRoutes);
 app.use('/dashboard', dashboardRoutes);
