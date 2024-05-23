@@ -1,46 +1,50 @@
 const Sequelize = require('sequelize');
 const config = require('../config/config');
-
 const env = process.env.NODE_ENV || 'development';
+const sequelizeConfig = config[env];
+
 const sequelize = new Sequelize(
-  config[env].database,
-  config[env].username,
-  config[env].password,
+  sequelizeConfig.database,
+  sequelizeConfig.username,
+  sequelizeConfig.password,
   {
-    host: config[env].host,
-    dialect: config[env].dialect,
+    host: sequelizeConfig.host,
+    dialect: sequelizeConfig.dialect,
+    dialectOptions: sequelizeConfig.dialectOptions,
+    logging: false,
   }
 );
 
-const User = require('./User');
-const Post = require('./Post');
-const Comment = require('./Comment');
+const User = require('./User')(sequelize);
+const Post = require('./Post')(sequelize);
+const Comment = require('./Comment')(sequelize);
 
 User.hasMany(Post, {
-    foreignKey: 'userId',
-    onDelete: 'CASCADE'
+  foreignKey: 'userId',
+  onDelete: 'CASCADE'
 });
 
 Post.belongsTo(User, {
-    foreignKey: 'userId'
+  foreignKey: 'userId'
 });
 
 Post.hasMany(Comment, {
-    foreignKey: 'postId',
-    onDelete: 'CASCADE'
+  foreignKey: 'postId',
+  onDelete: 'CASCADE'
 });
 
 Comment.belongsTo(User, {
-    foreignKey: 'userId'
+  foreignKey: 'userId'
 });
 
 Comment.belongsTo(Post, {
-    foreignKey: 'postId'
+  foreignKey: 'postId'
 });
 
 module.exports = {
-    User,
-    Post,
-    Comment,
-    sequelize
+  User,
+  Post,
+  Comment,
+  sequelize,
+  Sequelize
 };
