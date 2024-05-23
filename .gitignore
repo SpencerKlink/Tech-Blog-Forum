@@ -1,0 +1,7 @@
+.env
+logs
+.log
+npm-debug.log
+.DS_Store
+*.pem
+*.env.local

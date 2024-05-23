@@ -18,4 +18,18 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     }
 });
 
+module.exports = {
+  development: {
+    username: process.env.DB_USER,
+    password: process.env.DB_PW,
+    database: process.env.DB_NAME,
+    host: '127.0.0.1',
+    dialect: 'mysql',
+  },
+  production: {
+    use_env_variable: 'CLEARDB_DATABASE_URL',
+    dialect: 'mysql',
+  },
+};
+
 module.exports = sequelize;
