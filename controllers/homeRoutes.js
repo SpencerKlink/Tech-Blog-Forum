@@ -7,24 +7,25 @@ router.get('/', async (req, res) => {
             include: [
                 {
                     model: User,
-                    attributes: ['username']
+                    attributes: ['username'],
                 },
                 {
                     model: Comment,
                     attributes: ['id', 'content', 'postId', 'userId', 'createdAt'],
                     include: {
                         model: User,
-                        attributes: ['username']
-                    }
-                }
-            ]
+                        attributes: ['username'],
+                    },
+                },
+            ],
         });
-        const posts = postData.map(post => post.get({ plain: true }));
+        const posts = postData.map((post) => post.get({ plain: true }));
         res.render('homepage', {
             posts,
-            loggedIn: req.session.loggedIn
+            loggedIn: req.session.loggedIn,
         });
     } catch (err) {
+        console.error(err);
         res.status(500).json(err);
     }
 });
@@ -35,16 +36,16 @@ router.get('/post/:id', async (req, res) => {
             include: [
                 {
                     model: User,
-                    attributes: ['username']
+                    attributes: ['username'],
                 },
                 {
                     model: Comment,
                     include: {
                         model: User,
-                        attributes: ['username']
-                    }
-                }
-            ]
+                        attributes: ['username'],
+                    },
+                },
+            ],
         });
 
         if (!postData) {
@@ -55,9 +56,10 @@ router.get('/post/:id', async (req, res) => {
         const post = postData.get({ plain: true });
         res.render('single-post', {
             post,
-            loggedIn: req.session.loggedIn
+            loggedIn: req.session.loggedIn,
         });
     } catch (err) {
+        console.error(err);
         res.status(500).json(err);
     }
 });

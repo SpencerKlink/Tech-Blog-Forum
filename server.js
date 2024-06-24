@@ -1,11 +1,11 @@
 const express = require('express');
 const sessions = require('express-session');
 const exphbs = require('express-handlebars');
-const Sequelize = require('sequelize'); 
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
-const { sequelize } = require('./models'); 
-const routes = require('./controllers'); 
-const userRoutes = require('./controllers/api/userRoutes'); 
+const { sequelize } = require('./models');
+const routes = require('./controllers');
+const userRoutes = require('./controllers/api/userRoutes');
+const helpers = require('./utils/helpers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,11 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-app.engine('handlebars', exphbs.engine());
+const hbs = exphbs.create({ helpers });
+
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 const sess = {
-    secret: 'Super secret secret',
+    secret: process.env.SESSION_SECRET || 'Super secret secret',
     cookie: {},
     store: new SequelizeStore({
         db: sequelize
@@ -30,8 +32,7 @@ const sess = {
 
 app.use(sessions(sess));
 
-app.use('/api/users', userRoutes); 
-
+app.use('/api/users', userRoutes);
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
