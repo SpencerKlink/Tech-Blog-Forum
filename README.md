@@ -79,8 +79,8 @@ Configure environment variables:
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
 
 ## Links
-- Heroku :
-- GitHub : 
+- Heroku : https://tech-blog-forum-b291035898c0.herokuapp.com
+- GitHub :  https://github.com/SpencerKlink/Tech-Blog-Forum
 
 ## Questions
 If you have any questions about the project, feel free to reach out:
