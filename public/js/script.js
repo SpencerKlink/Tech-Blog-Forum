@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (signupForm) {
         signupForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const username = document.querySelector('#username').value.trim();
-            const password = document.querySelector('#password').value.trim();
+            const username = document.querySelector('#username-signup').value.trim();
+            const password = document.querySelector('#password-signup').value.trim();
             const errorElement = document.querySelector('#signup-error');
 
             if (username && password) {
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
 
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach((button) => {
@@ -139,4 +140,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+document.getElementById('signup-form').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+
+    const userData = {
+        username: document.getElementById('username-signup').value,
+        password: document.getElementById('password-signup').value
+    };
+
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            window.location.href = '/dashboard'; 
+        } else {
+            document.getElementById('signup-error').innerText = data.message;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 });

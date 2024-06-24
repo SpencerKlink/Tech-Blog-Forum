@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
 const { sequelize } = require('./models'); 
 const routes = require('./controllers'); 
+const userRoutes = require('./controllers/api/userRoutes'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,8 @@ const sess = {
 };
 
 app.use(sessions(sess));
+
+app.use('/api/users', userRoutes); 
 
 app.use(routes);
 
