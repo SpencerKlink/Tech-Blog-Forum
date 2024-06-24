@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate": "sequelize db:migrate"
   },
   "engines": {
     "node": "14.x"
@@ -25,5 +26,8 @@
     "mysql2": "^3.9.7",
     "nodemon": "^3.1.0",
     "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }
